@@ -5,6 +5,7 @@ from flask import jsonify
 import requests
 import re
 import dis
+from module.db import Database
 from bs4 import BeautifulSoup as bs
 
 #시작시간 
@@ -71,9 +72,6 @@ def GetTimetable(json):
             string = td.text.replace(", ", ",").replace("7호관", "칠호관")
             temp_list += string.split()
 
-        timetable = list()
-
-
         days = {
             "월":"mon",
             "화":"tue",
@@ -82,31 +80,21 @@ def GetTimetable(json):
             "금":"fri"
         }
 
+        studentid = login_info["txt_user_id"]
         for item in temp_list:
             
             #일반 강의 검색
             pattern = re.compile(r'[월,화,수,목,금]([A-Z]|\d{1,2})') 
             match = re.search(pattern, item)
-            # if match is not None: 
             time = str(match.group())[1:]
-            timetable.append({ 
-                "id" : login_info["txt_user_id"],
-                "day" : days[item[0]],
-                "start" : start_time[time], 
-                "end" : end_time[time]
-            })
+            Database.AddTimetable(studentid, days[item[0]], start_time[time],end_time[time])
 
             #연강 검색
             pattern = re.compile(r'[,]([A-Z]|\d{1,2})')
             match = re.search(pattern, item)
             if match is not None: 
                 time = str(match.group())[1:]
-                timetable.append({ 
-                    "id" : login_info["txt_user_id"],
-                    "day" : days[item[0]],
-                    "start" : start_time[time], 
-                    "end" : end_time[time]
-                })
-        return(timetable)
-
+                Database.AddTimetable(studentid, days[item[0]], start_time[time],end_time[time])
+        return "SQL commit success"
+        
     #TODO: 수업 시작, 종료시간 DB화
