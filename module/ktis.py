@@ -44,57 +44,98 @@ end_time = {
 }
 
 # Session 생성, with 구문 안에서 유지
+def Login(json):
+    # try:
+        with requests.Session() as s:
+            login_info = {
+                'txt_user_id': json.get("id"),
+                'txt_passwd': json.get("pw")
+            }
+            login_req = s.post('http://ktis.kookmin.ac.kr/kmu/com.Login.do?', data=login_info)
+            soup = bs(login_req.text, 'html.parser')
+            match = soup.find('body', text = re.compile('ktis.kookmin.ac.kr'))
+            if match is not None:
+                return "Login Error"
+
+            else:
+                studentid = login_info["txt_user_id"]
+                sql = "SELECT EXISTS (SELECT * FROM users WHERE studentid='"+studentid+"') as success;"
+                exist = Database.GetSQL(sql)
+                #학생이 기존 DB에 있는지 확인
+                if exist[0] is 1:
+                    return "Login success"
+                else:
+                    post_one = s.get('https://ktis.kookmin.ac.kr/kmu/usb.Usb0102rAGet01.do')
+                    soup = bs(post_one.text, 'html.parser')
+                    tables = soup.findAll("table")[1]
+                    tr = tables.select("tr")[3]
+                    tr = tr.select("tr")[2]
+                    name = tr.select("td")[1]
+                    sql = "INSERT INTO `users` (`studentid`, `name`)  VALUES ('" + studentid + "', '" + name.text + "')"
+                    Database.CommitSQL(sql)
+                    return "Signup success"
+
+
 def GetTimetable(json):
     with requests.Session() as s:
         login_info = {
             'txt_user_id': json.get("id"),
             'txt_passwd': json.get("pw")
         }
-        
         login_req = s.post('http://ktis.kookmin.ac.kr/kmu/com.Login.do?', data=login_info)
+        soup = bs(login_req.text, 'html.parser')
+        match = soup.find('body', text = re.compile('ktis.kookmin.ac.kr'))
+        if match is not None:
+            return "Login Error"
+
+        else:
+            # GetTimetable 디버깅용 코드
+            # Users에 사용자 정보가 없으면 추가
+            Login(json)
+
+            # 로그인 세션 유지
+            # 수강신청내역 불러오기
+            post_one = s.get('https://ktis.kookmin.ac.kr/kmu/usb.Usb0102rAGet01.do')
+            soup = bs(post_one.text, 'html.parser')
+
+            #시간표 분리
+            tables = soup.findAll("table")[1]
+            tr_list = tables.select("tr")[8:]
+            temp_list = list()
+            for tr in tr_list:
+                td = tr.select("td")[6]
+                string = td.text.replace(", ", ",").replace("7호관", "칠호관")
+                temp_list += string.split()
+
+            days = {
+                "월":"mon",
+                "화":"tue",
+                "수":"wed",
+                "목":"thu",
+                "금":"fri"
+            }
+
+            studentid = login_info["txt_user_id"]
+            sql = "SELECT exist FROM users WHERE studentid = '" + studentid + "'"
+            exist = Database.GetSQL(sql)
+            #학생의 시간표가 기존 DB에 있는지 확인
+            if exist[0] is 0: 
+                for item in temp_list:
+                    
+                    #일반 강의 검색
+                    pattern = re.compile(r'[월,화,수,목,금]([A-Z]|\d{1,2})') 
+                    match = re.search(pattern, item)
+                    time = str(match.group())[1:]
+                    Database.AddTimetable(studentid, days[item[0]], start_time[time],end_time[time])
+
+                    #연강 검색
+                    pattern = re.compile(r'[,]([A-Z]|\d{1,2})')
+                    match = re.search(pattern, item)
+                    if match is not None: 
+                        time = str(match.group())[1:]
+                        Database.AddTimetable(studentid, days[item[0]], start_time[time],end_time[time])
+                return "SQL commit success"
+            else:
+                return "Already exists "
         
-        # 로그인체크
-        if login_req.status_code != 200:
-            raise Exception('Login Error')
-
-        # 로그인 세션 유지
-        
-        # 수강신청내역 불러오기
-        post_one = s.get('https://ktis.kookmin.ac.kr/kmu/usb.Usb0102rAGet01.do')
-        soup = bs(post_one.text, 'html.parser')
-
-        #시간표 분리
-        tables = soup.findAll("table")[1]
-        tr_list = tables.select("tr")[8:]
-        temp_list = list()
-        for tr in tr_list:
-            td = tr.select("td")[6]
-            string = td.text.replace(", ", ",").replace("7호관", "칠호관")
-            temp_list += string.split()
-
-        days = {
-            "월":"mon",
-            "화":"tue",
-            "수":"wed",
-            "목":"thu",
-            "금":"fri"
-        }
-
-        studentid = login_info["txt_user_id"]
-        for item in temp_list:
-            
-            #일반 강의 검색
-            pattern = re.compile(r'[월,화,수,목,금]([A-Z]|\d{1,2})') 
-            match = re.search(pattern, item)
-            time = str(match.group())[1:]
-            Database.AddTimetable(studentid, days[item[0]], start_time[time],end_time[time])
-
-            #연강 검색
-            pattern = re.compile(r'[,]([A-Z]|\d{1,2})')
-            match = re.search(pattern, item)
-            if match is not None: 
-                time = str(match.group())[1:]
-                Database.AddTimetable(studentid, days[item[0]], start_time[time],end_time[time])
-        return "SQL commit success"
-        
-    #TODO: 수업 시작, 종료시간 DB화
+#TODO: 수업 시작, 종료시간 DB화

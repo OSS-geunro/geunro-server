@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import json
 
-from module.ktis import GetTimetable
+from module.ktis import GetTimetable, Login
 
 app = Flask(__name__);
 
@@ -13,8 +13,15 @@ def main():
 def loadData():
   if request.method == 'POST':
     data = request.json
-    timetable = GetTimetable(data)
-    return jsonify(timetable)
+    return GetTimetable(data)
+  else:
+    return "POST id and pw"
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+  if request.method == 'POST':
+    data = request.json
+    return Login(data)
   else:
     return "POST id and pw"
 
