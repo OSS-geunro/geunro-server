@@ -1,27 +1,26 @@
 from flask import Flask, request, jsonify
 import json
 
-from module.ktis import GetTimetable, Login
-
+from module.ktis import KTIS
 app = Flask(__name__);
 
 @app.route("/")
 def main():
   return "main page"
 
-@app.route("/loadData", methods=["GET", "POST"])
-def loadData():
+@app.route("/ktis/toDB", methods=["GET", "POST"])
+def KTIStoDB():
   if request.method == 'POST':
     data = request.json
-    return GetTimetable(data)
+    return KTIS.ToDB(data)
   else:
     return "POST id and pw"
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
+@app.route("/ktis/login", methods=["GET", "POST"])
+def KTISlogin():
   if request.method == 'POST':
     data = request.json
-    return Login(data)
+    return KTIS.Login(data)
   else:
     return "POST id and pw"
 
