@@ -2,8 +2,8 @@
 
 #worktable control
 import time, datetime
-from db import Database
-from timetable import Timetable
+from module.db import Database
+from module.timetable import Timetable
 from datetime import datetime, timedelta
 
 class Worktable:

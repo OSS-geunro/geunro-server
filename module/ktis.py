@@ -4,7 +4,8 @@
 from flask import jsonify
 import requests
 import re
-from module.db import Database, Timetable
+from module.db import Database
+from module.timetable import Timetable
 from bs4 import BeautifulSoup as bs
 
 class KTIS:
@@ -15,11 +16,11 @@ class KTIS:
                     'txt_user_id': json.get("id"),
                     'txt_passwd': json.get("pw")
                 }
-                login_req = s.post('http://ktis.kookmin.ac.kr/kmu/com.Login.do?', data=login_info)
+                login_req = s.post('https://ktis.kookmin.ac.kr/kmu/com.Login.do?', data=login_info)
                 soup = bs(login_req.text, 'html.parser')
                 match = soup.find('body', text = re.compile('ktis.kookmin.ac.kr'))
                 if match is not None:
-                    return "Login Error"
+                    return "401"
 
                 else:
                     studentid = login_info["txt_user_id"]
@@ -27,7 +28,7 @@ class KTIS:
                     exist = Database.GetSQL(sql)
                     #학생이 기존 DB에 있는지 확인
                     if exist[0][0] is 1:
-                        return "Login success"
+                        return "200"
                     else:
                         post_one = s.get('https://ktis.kookmin.ac.kr/kmu/usb.Usb0102rAGet01.do')
                         soup = bs(post_one.text, 'html.parser')
@@ -37,7 +38,7 @@ class KTIS:
                         name = tr.select("td")[1]
                         sql = "INSERT INTO `users` (`studentid`, `name`)  VALUES ('" + studentid + "', '" + name.text + "')"
                         Database.CommitSQL(sql)
-                        return "Signup success"
+                        return "201"
 
 
     def ToDB(json):
@@ -46,18 +47,18 @@ class KTIS:
                 'txt_user_id': json.get("id"),
                 'txt_passwd': json.get("pw")
             }
-            login_req = s.post('http://ktis.kookmin.ac.kr/kmu/com.Login.do?', data=login_info)
+            login_req = s.post('https://ktis.kookmin.ac.kr/kmu/com.Login.do?', data=login_info)
             soup = bs(login_req.text, 'html.parser')
             match = soup.find('body', text = re.compile('ktis.kookmin.ac.kr'))
             if match is not None:
-                return "Login Error"
+                return "401"
 
             else:
 
                 ################################
-                ## GetTimetable 디버깅용 코드
+                ## Login 디버깅용 코드
                 ## Users에 사용자 정보가 없으면 추가
-                # Login(json)  
+                KTIS.Login(json)  
                 ################################
 
                 # 수강신청내역 불러오기
@@ -84,14 +85,14 @@ class KTIS:
                         pattern = re.compile(r'[월,화,수,목,금]([A-Z]|\d{1,2})') 
                         match = re.search(pattern, item)
                         time = str(match.group())[1:]
-                        Database.AddTimetable(studentid, item[0], time)
+                        Timetable.Add(studentid, item[0], time)
 
                         #연강 검색
                         pattern = re.compile(r'[,]([A-Z]|\d{1,2})')
                         match = re.search(pattern, item)
                         if match is not None: 
                             time = str(match.group())[1:]
-                            Database.AddTimetable(studentid, item[0], time)
-                    return "SQL commit success"
+                            Timetable.Add(studentid, item[0], time)
+                    return "201"
                 else:
-                    return "Already exists "
+                    return "409"

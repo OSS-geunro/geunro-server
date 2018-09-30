@@ -3,7 +3,7 @@
 #timetable control
 import pymysql
 import os
-from db import Database
+from module.db import Database
 from dotenv import load_dotenv, find_dotenv
 from collections import defaultdict
 
