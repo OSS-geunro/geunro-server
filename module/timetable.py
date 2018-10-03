@@ -8,7 +8,8 @@ from dotenv import load_dotenv, find_dotenv
 from collections import defaultdict
 
 class Timetable:
-    #DB에 시간표 추가
+    #DB에 수업 추가
+    #(학번, 요일, 수업시간)
     def Add(studentid, day, time):
         sql = "UPDATE `users` SET `exist` = '1' WHERE `studentid` = '" + studentid + "';"
         Database.CommitSQL(sql)
@@ -16,6 +17,7 @@ class Timetable:
         Database.CommitSQL(sql)
     
     #특정요일의 시간표 가져오기
+    #(요일)
     def GetDay(day):
         db = Database.Config()
         cursor = db.cursor()

@@ -7,11 +7,35 @@ from module.timetable import Timetable
 from datetime import datetime, timedelta
 
 class Worktable:
+  #업무 추가
+  #(근로시간표이름, 업무이름, 요일, 시작시간, 끝시간, 최소인원)
+  def CreateWork(IDs, events, worktable):
+    worktable = worktable[0]
+    #존재하는 이름인지 확인
+    sql = "SELECT name FROM table_list WHERE name = '" + worktable + "'"
+    tableName = Database.GetSQL(sql)
+    if Database.GetSQL(sql):
+      #존재하는경우 409(존재함) 에러 반환
+      return "409"
+    else:
+      # 근무시간표 목록에 추가
+      sql = "INSERT INTO `table_list` (`name`)  VALUES ('" + worktable + "')"
+      Database.CommitSQL(sql)
+      # 근무시간표 ID가져오기 (이름대신 ID사용)
+      sql = "SELECT id FROM table_list WHERE name = '" + worktable + "'"
+      tableID = Database.GetSQL(sql)[0][0]
+      # 업무 목록에 업무 추가
+      for i in events:
+        sql = "INSERT INTO `work_list` (`worktable`, `name`, `day`, `start`, `end`, `min`)  VALUES ('" + str(tableID) + "', '" + i["name"] + "', '" + i["day"].lower() + "', '" + str(i["start"]) + "', '" + str(i["end"]) + "', '" + i["minimum"] + "')"
+        Database.CommitSQL(sql)
+      # 근무시간표 사용자 목록에 학번 추가
+      for studentid in IDs:
+        sql = "INSERT INTO `table_users` (`studentid`, `tablename`)  VALUES ('" + studentid + "', '" + worktable + "')"
+        Database.CommitSQL(sql)
+      return "201"
 
-  def CreateWork(worktable, name, day, start, end, minimum):
-    sql = "INSERT INTO `work_list` (`worktable`, `name`, `day`, `start`, `end`, `min`)  VALUES ('" + worktable + "', '" + name + "', '" + day + "', '" + str(start) + "', '" + str(end) + "', '" + minimum + "')"
-    Database.CommitSQL(sql)
-
+  #업무시간 가능한지 확인
+  #(요일, 시작, 끝, 최소인원)
   def Available(day, start, end, minimum):
     # s0<=e1 && s1<=e0 then overlap
     time_list = Timetable.GetDay(day)
@@ -28,6 +52,8 @@ class Worktable:
           break
     return student_list
 
+  #근무시간표 생성
+  #(근무시간표이름, 하루최대업무시간, 일주일최대업무시간)
   def Update(worktable, daily, weekly):
     sql = "SELECT studentid FROM users WHERE worktable = '" + worktable + "'"
     days = {"월":timedelta(0),"화":timedelta(0),"수":timedelta(0),"목":timedelta(0),"금":timedelta(0),"timesum":timedelta(0)}

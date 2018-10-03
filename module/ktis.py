@@ -9,6 +9,7 @@ from module.timetable import Timetable
 from bs4 import BeautifulSoup as bs
 
 class KTIS:
+    #KTIS 로그인
     def Login(json):
         # try:
             with requests.Session() as s:
@@ -40,7 +41,7 @@ class KTIS:
                         Database.CommitSQL(sql)
                         return "201"
 
-
+    #DB에 시간표 추가
     def ToDB(json):
         with requests.Session() as s:
             login_info = {

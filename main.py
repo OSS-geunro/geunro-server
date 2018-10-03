@@ -13,6 +13,7 @@ CORS(app)
 def main():
   return "main page"
 
+#시간표 업로드
 @app.route("/api/ktis/toDB", methods=["POST"])
 def KTIStoDB():
   if request.method == 'POST':
@@ -33,6 +34,7 @@ def KTIStoDB():
 #     "pw" : " "
 # }
 
+#로그인
 @app.route("/api/ktis/login", methods=["GET", "POST"])
 def KTISlogin():
   if request.method == 'POST':
@@ -52,15 +54,21 @@ def KTISlogin():
 #     "pw" : " "
 # }
 
+#근로시간표 제작
 @app.route("/api/work/add", methods=["POST"])
 def WorkAdd():
-  print("dddd")
   if request.method == 'POST':
-    data = request.json
-    return Worktable.CreateWork(data)
-    print("sss")
+    IDs = worktable = request.form.getlist("IDs[]")
+    events = json.loads(request.form.getlist("events")[0])
+    worktable = request.form.getlist("worktable")
+    print(request.form)
+    response = Response(
+        status = int(Worktable.CreateWork(IDs, events, worktable)),
+        mimetype ='application/json'
+    )
+    return response
   else:
-    return "POST worktable, name, day, start, end and minimum"
+    return "POST worktable(name, day, start, end, minimum)"
 
 # POST
 # {
@@ -75,7 +83,7 @@ def WorkAdd():
 @app.route("/api/work/create", methods=["GET", "POST"])
 def WorkCreate():
   if request.method == 'POST':
-    data = request.json
+    data = request.get_json(force=True)
     return Worktable.Update(data)
   else:
     return "POST worktable,daily and weekly"

@@ -11,6 +11,7 @@ load_dotenv(find_dotenv())
 os.environ.get("DB_HOST")
 class Database:
     #DB 설정
+    #.env 참조
     def Config():
         db = pymysql.connect(
             host=os.environ.get("DB_HOST"),
@@ -22,7 +23,7 @@ class Database:
         )
         return db
 
-    #SQL Commit 함수
+    #SQL Commit
     def CommitSQL(sql):
         db = Database.Config()
         cursor = db.cursor()
@@ -30,7 +31,7 @@ class Database:
         db.commit()
         db.close()
 
-    #SQL Get 함수
+    #SQL Get
     def GetSQL(sql):
         db = Database.Config()
         cursor = db.cursor()
