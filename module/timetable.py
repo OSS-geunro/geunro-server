@@ -19,9 +19,10 @@ class Timetable:
     #특정요일의 시간표 가져오기
     #(요일)
     def GetDay(day):
+        kor = {"mon":"월","tue":"화","wed":"수","thu":"목","fri":"금"}
         db = Database.Config()
         cursor = db.cursor()
-        sql = "SELECT studentid,start,end FROM timetable JOIN timeblock ON timetable.time = timeblock.time WHERE day ='" + day + "' ORDER BY end"
+        sql = "SELECT table_users.studentid,start,end,day FROM timeblock JOIN timetable ON timetable.time = timeblock.time JOIN table_users ON timetable.studentid = table_users.studentid WHERE day ='" + kor[day] + "' ORDER BY end"
         cursor.execute(sql)
         result = cursor.fetchone()
         db.close()

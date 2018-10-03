@@ -58,7 +58,7 @@ def KTISlogin():
 @app.route("/api/work/add", methods=["POST"])
 def WorkAdd():
   if request.method == 'POST':
-    IDs = worktable = request.form.getlist("IDs[]")
+    IDs = request.form.getlist("IDs[]")
     events = json.loads(request.form.getlist("events")[0])
     worktable = request.form.getlist("worktable")
     response = Response(
@@ -79,26 +79,10 @@ def WorkAdd():
 #     "minimum" : " "
 # }
 
-@app.route("/api/work/create", methods=["GET", "POST"])
-def WorkCreate():
-  if request.method == 'POST':
-    data = request.get_json(force=True)
-    return Worktable.Update(data)
-  else:
-    return "POST worktable,daily and weekly"
-
-# POST
-# {
-#     "worktable" : " ",
-#     "daily" : " ",
-#     "weekly" : " "
-# }
-
 
 @app.route("/api/work/getlist", methods=["GET"])
 def WorkList():
   if request.method == 'GET':
-    print(request.form)
     response = Response(
         response = Worktable.GetList(),
         status = 200,
@@ -106,7 +90,23 @@ def WorkList():
     )
     return response
   else:
-    return "POST worktable(name, day, start, end, minimum)"
+    return "GET WorkTable list"
+
+
+
+@app.route("/api/work/access", methods=["POST"])
+def WorkAccess():
+  if request.method == 'POST':
+    data = request.form
+    response = Response(
+        response = Worktable.Update(data),
+        status = 200,
+        mimetype ='application/json'
+    )
+    return response
+  else:
+    return "GET WorkTable list"
+
 
 if __name__ == "__main__":
   app.run(debug=True, host='0.0.0.0', port=5009)
