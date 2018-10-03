@@ -5,6 +5,7 @@ import time, datetime
 from module.db import Database
 from module.timetable import Timetable
 from datetime import datetime, timedelta
+import json
 
 class Worktable:
   #업무 추가
@@ -69,3 +70,38 @@ class Worktable:
           users[student]["timesum"] += work[5] - work[4]
           sql = "INSERT INTO `student_list` (`worktable`, `studentid`, `name`, `workid`)  VALUES ('" + worktable + "', '" + str(student) + "', '" + work[1] + "', '" + str(work[0]) + "')"
           Database.CommitSQL(sql)
+
+  def GetList():
+    work_list = list()
+
+    sql = "SELECT name FROM table_list"
+    data = Database.GetSQL(sql)
+
+    for i in data:
+      student_list=list()
+      worktable = i[0]
+      sql = "SELECT count(users.studentid) FROM table_users JOIN users ON table_users.studentid = users.studentid WHERE tablename = '" + worktable + "'"
+      existcount = Database.GetSQL(sql)[0][0]
+      sql = "SELECT count(users.studentid) FROM table_users JOIN users ON table_users.studentid = users.studentid WHERE exist = 1 and tablename = '" + worktable + "'"
+      allcount = Database.GetSQL(sql)[0][0]
+      # print(worktable, existcount, "/", allcount)
+      sql = "SELECT users.studentid, users.name, exist FROM table_users JOIN users ON table_users.studentid = users.studentid WHERE tablename = '" + worktable + "'"
+      students = Database.GetSQL(sql)
+      
+      for student in students:
+        form = {
+          'id' : student[0],
+          'name' : student[1],
+          'exist' : student[2]
+        }
+        student_list.append(form)
+
+      work = {
+        'workName' : worktable,
+        'existCount' : existcount,
+        'allCount' : allcount,
+        'students' : student_list
+      }
+      work_list.append(work)
+
+    return json.dumps(work_list, ensure_ascii=False)

@@ -61,7 +61,6 @@ def WorkAdd():
     IDs = worktable = request.form.getlist("IDs[]")
     events = json.loads(request.form.getlist("events")[0])
     worktable = request.form.getlist("worktable")
-    print(request.form)
     response = Response(
         status = int(Worktable.CreateWork(IDs, events, worktable)),
         mimetype ='application/json'
@@ -94,6 +93,20 @@ def WorkCreate():
 #     "daily" : " ",
 #     "weekly" : " "
 # }
+
+
+@app.route("/api/work/getlist", methods=["GET"])
+def WorkList():
+  if request.method == 'GET':
+    print(request.form)
+    response = Response(
+        response = Worktable.GetList(),
+        status = 200,
+        mimetype ='application/json'
+    )
+    return response
+  else:
+    return "POST worktable(name, day, start, end, minimum)"
 
 if __name__ == "__main__":
   app.run(debug=True, host='0.0.0.0', port=5009)
