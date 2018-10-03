@@ -80,19 +80,17 @@ class Worktable:
     for i in data:
       student_list=list()
       worktable = i[0]
-      sql = "SELECT count(users.studentid) FROM table_users JOIN users ON table_users.studentid = users.studentid WHERE tablename = '" + worktable + "'"
-      existcount = Database.GetSQL(sql)[0][0]
-      sql = "SELECT count(users.studentid) FROM table_users JOIN users ON table_users.studentid = users.studentid WHERE exist = 1 and tablename = '" + worktable + "'"
+      sql = "SELECT count(table_users.studentid) FROM table_users LEFT OUTER JOIN users ON table_users.studentid = users.studentid WHERE tablename = '" + worktable + "'"
       allcount = Database.GetSQL(sql)[0][0]
-      # print(worktable, existcount, "/", allcount)
-      sql = "SELECT users.studentid, users.name, exist FROM table_users JOIN users ON table_users.studentid = users.studentid WHERE tablename = '" + worktable + "'"
+      sql = "SELECT count(table_users.studentid) FROM table_users LEFT OUTER JOIN users ON table_users.studentid = users.studentid WHERE exist = 1 and tablename = '" + worktable + "'"
+      existcount = Database.GetSQL(sql)[0][0]
+      sql = "SELECT table_users.studentid, exist FROM table_users LEFT OUTER JOIN users ON table_users.studentid = users.studentid WHERE tablename = '" + worktable + "'"
       students = Database.GetSQL(sql)
       
       for student in students:
         form = {
           'id' : student[0],
-          'name' : student[1],
-          'exist' : student[2]
+          'exist' : student[1]
         }
         student_list.append(form)
 
