@@ -153,14 +153,16 @@ class Worktable:
       worktable.append(events)
     return json.dumps(worktable, ensure_ascii=False)
 
-    def DelTable(data):
-      worktable_id = data['worktable_id']
-      sql = "DELETE FROM student_list WHERE worktableid = '" + worktable_id + "'"
-      Database.CommitSQL(sql)
-      sql = "DELETE FROM table_list WHERE id = '" + worktable_id + "'"
-      Database.CommitSQL(sql)
-      sql = "DELETE FROM table_users WHERE tableid = '" + worktable_id + "'"
-      Database.CommitSQL(sql)
-      sql = "DELETE FROM work_list WHERE tableid = '" + worktable_id + "'"
-      Database.CommitSQL(sql)
+  def DelTable(data):
+    worktable = data['worktable']
+    sql = "SELECT id FROM table_list WHERE name = '" + worktable + "'"
+    worktable_id = str(Database.GetSQL(sql)[0][0])
+    sql = "DELETE FROM student_list WHERE worktableid = '" + worktable_id + "'"
+    Database.CommitSQL(sql)
+    sql = "DELETE FROM table_list WHERE id = '" + worktable_id + "'"
+    Database.CommitSQL(sql)
+    sql = "DELETE FROM table_users WHERE tableid = '" + worktable_id + "'"
+    Database.CommitSQL(sql)
+    sql = "DELETE FROM work_list WHERE tableid = '" + worktable_id + "'"
+    Database.CommitSQL(sql)
     return '200'
