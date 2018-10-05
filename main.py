@@ -94,8 +94,8 @@ def WorkList():
 
 
 
-@app.route("/api/work/access", methods=["POST"])
-def WorkAccess():
+@app.route("/api/work/getid", methods=["POST"])
+def WorkCreate():
   if request.method == 'POST':
     data = request.form
     response = Response(
@@ -105,7 +105,34 @@ def WorkAccess():
     )
     return response
   else:
-    return "GET WorkTable list"
+    return "POST workTable ID"
+
+
+@app.route("/api/work/access", methods=["POST"])
+def WorkAccess():
+  if request.method == 'POST':
+    data = request.form
+    response = Response(
+        response = Worktable.Access(data),
+        status = 200,
+        mimetype ='application/json'
+    )
+    return response
+  else:
+    return "POST WorkTable ID"
+
+@app.route("/api/work/delete", methods=["POST"])
+def DeleteTable():
+  if request.method == 'POST':
+    data = request.form
+    response = Response(
+        response = Worktable.DelTable(data),
+        status = 200,
+        mimetype ='application/json'
+    )
+    return response
+  else:
+    return "POST WorkTable ID"
 
 
 if __name__ == "__main__":
