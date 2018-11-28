@@ -1,5 +1,4 @@
-# 근로시간표 메이커 / server
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# 꿀로 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 해당 프로젝트는 국민대학교 강의 '오픈소스소프트웨어'의 조별 프로젝트로 제작되었습니다.
 ## 사전설정: ```.env```

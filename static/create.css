@@ -1,0 +1,22 @@
+.fc-event {
+  background-color: #79bde2;
+  border: none;
+  border-radius: 0;
+}
+.fc-widget-header {
+  border-color: transparent !important;
+}
+
+.fc-widget-content {
+  border-left: 0 !important;
+  border-right: 0 !important;
+}
+
+.fc-axis {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+
+td {
+  border-color: #eee !important;
+}

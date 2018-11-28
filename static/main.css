@@ -1,0 +1,58 @@
+.user-type-selector {
+  list-style: none;
+}
+.type {
+  padding-top: 0 !important;
+  display: table-cell;
+}
+input[type="radio"] {
+  display: none;
+}
+input:checked + label {
+  border-color: #79bde2;
+}
+.type-content {
+  border: 1.2px solid #e2e2e2;
+  border-radius: 5px;
+  padding-top: 1.8rem;
+  padding-bottom: 1.8rem;
+  margin: 0;
+}
+input {
+  border: 1.2px solid #e2e2e2 !important;
+  outline: none;
+}
+:focus {
+  outline: none;
+}
+
+.btn {
+  background-color: #79bde2;
+  border: 0;
+  font-size: 1rem;
+}
+.btn:hover {
+  background-color: rgb(114, 178, 212);
+}
+.btn:active {
+  background-color: rgb(108, 167, 199) !important;
+}
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #fff inset;
+  -webkit-text-fill-color: #000;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+
+h1, h2, h3, h4, h5, h6, span, label{
+  color:#445057;
+}
+
+.text-muted{
+  color: #95a6b1 !important;
+}

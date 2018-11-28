@@ -89,38 +89,14 @@ class Worktable:
     
     return str(table_id)
 
-  def GetList():
-    work_list = list()
-
-    sql = "SELECT name FROM table_list"
+  def GetList(student_id):
+    sql = "SELECT tablename FROM table_users WHERE studentid = '" + student_id + "'"
     data = Database.GetSQL(sql)
-
-    for i in data:
-      student_list=list()
-      worktable = i[0]
-      sql = "SELECT count(table_users.studentid) FROM table_users LEFT OUTER JOIN users ON table_users.studentid = users.studentid WHERE tablename = '" + worktable + "'"
-      allcount = Database.GetSQL(sql)[0][0]
-      sql = "SELECT count(table_users.studentid) FROM table_users LEFT OUTER JOIN users ON table_users.studentid = users.studentid WHERE exist = 1 and tablename = '" + worktable + "'"
-      existcount = Database.GetSQL(sql)[0][0]
-      sql = "SELECT table_users.studentid, exist FROM table_users LEFT OUTER JOIN users ON table_users.studentid = users.studentid WHERE tablename = '" + worktable + "'"
-      students = Database.GetSQL(sql)
-      
-      for student in students:
-        form = {
-          'id' : student[0],
-          'exist' : student[1]
-        }
-        student_list.append(form)
-
-      work = {
-        'workName' : worktable,
-        'existCount' : existcount,
-        'allCount' : allcount,
-        'students' : student_list
-      }
-      work_list.append(work)
-
-    return json.dumps(work_list, ensure_ascii=False)
+    try :
+      tableName = data[0][0] 
+    except IndexError:
+      return 0
+    return tableName
 
 
   def Access(data):
