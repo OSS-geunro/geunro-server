@@ -6,7 +6,12 @@ from module.ktis import KTIS
 from module.worktable import Worktable
 from module.timetable import Timetable
 
+# from dotenv import load_dotenv, find_dotenv
+
+# load_dotenv(find_dotenv())
+
 app = Flask(__name__)
+# app.secret_key = os.environ.get("SECRET_KEY")
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 CORS(app)
 
@@ -24,11 +29,7 @@ def main():
         )
         return response
     elif 'id' in session:
-        print(session['userType'])
-        if session['id'] == "student":
-            return redirect(url_for('studentTable'))
-        else:
-            return redirect(url_for('teacherTable'))
+        return redirect(url_for(session['userType'] + 'Table'))
     else:
         return render_template('login.html')
 
@@ -36,7 +37,7 @@ def main():
 @app.route("/student")
 def studentTable():
     if 'id' in session:
-        exist = Worktable.GetList("111")
+        exist = Worktable.GetList(session['id'])
         return render_template('student-table.html', exist=exist)
     else:
         return redirect(url_for('main'))

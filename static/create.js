@@ -83,7 +83,7 @@ $("#next-pg").click(function() {
       worktable: worktable
     },
     success: function(xhr) {
-
+      console.log(jsoned)
     },
     error: function(xhr) {
     }
