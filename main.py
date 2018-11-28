@@ -44,6 +44,7 @@ def studentTable():
             exist = Worktable.GetList(session['id'])
             return render_template('student-table.html', exist=exist)
         else:
+            return redirect(url_for('teacherTable'))
             # 경고메시지
     return redirect(url_for('main'))
 
@@ -70,6 +71,7 @@ def teacherTable():
             exist = Worktable.GetList("111")
             return render_template('teacher-table.html', exist=exist)
         else:
+            return redirect(url_for('studentTable'))
             # 경고메시지
     return redirect(url_for('main'))
 
