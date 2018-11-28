@@ -15,14 +15,17 @@ app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 CORS(app)
 
+@app.route("/")
+def main():
+    return render_template('index.html')
 
 @app.route("/login", methods=["GET", "POST"])
-def main():
+def login():
     if request.method == 'POST':
         result = int(KTIS.Login(request))
         if result is 200:
             session['id'] = request.form['id']
-            session['userType'] = request.form['radio']
+            session['userType'] = request.form['type']
         response = Response(
             status=result,
             mimetype='application/json'
@@ -37,10 +40,12 @@ def main():
 @app.route("/student")
 def studentTable():
     if 'id' in session:
-        exist = Worktable.GetList(session['id'])
-        return render_template('student-table.html', exist=exist)
-    else:
-        return redirect(url_for('main'))
+        if session["userType"] == 'student':
+            exist = Worktable.GetList(session['id'])
+            return render_template('student-table.html', exist=exist)
+        else:
+            # 경고메시지
+    return redirect(url_for('main'))
 
 
 @app.route("/apply", methods=["GET", "POST"])
@@ -61,10 +66,12 @@ def studentApply():
 @app.route("/teacher")
 def teacherTable():
     if 'id' in session:
-        exist = Worktable.GetList("111")
-        return render_template('teacher-table.html', exist=exist)
-    else:
-        return redirect(url_for('main'))
+        if session["userType"] == 'teacher':
+            exist = Worktable.GetList("111")
+            return render_template('teacher-table.html', exist=exist)
+        else:
+            # 경고메시지
+    return redirect(url_for('main'))
 
 
 @app.route("/create", methods=["GET", "POST"])
