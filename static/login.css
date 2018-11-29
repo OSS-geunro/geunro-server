@@ -1,9 +1,14 @@
+body{
+    font-family: 'Black Han Sans', sans-serif;
+    font-weight: lighter;
+    padding-top: 10rem;
+}
 h4 {
   font-size: 0.8rem;
-  font-weight: bold;
+  font-weight: lighter;
 }
 h5 {
   font-size: 0.75rem;
-  font-weight: 300;
   margin: 0;
+  font-weight: lighter;
 }

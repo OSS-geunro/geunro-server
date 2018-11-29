@@ -1,4 +1,8 @@
-
+body{
+    font-family: 'Black Han Sans', sans-serif;
+    font-weight: lighter;
+    padding-top: 10rem;
+}
 h4 {
   font-size: 1.1rem;
   font-weight: bold;
@@ -6,7 +10,7 @@ h4 {
 }
 h5 {
   font-size: 0.9rem;
-  font-weight: 300;
+  font-weight: 10;
   margin-bottom: 2rem;
 }
 .btn {
