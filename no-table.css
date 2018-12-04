@@ -1,0 +1,26 @@
+body{
+    font-family: 'Black Han Sans', sans-serif;
+    font-weight: lighter;
+    padding-top: 10rem;
+}
+h4 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+h5 {
+  font-size: 0.9rem;
+  font-weight: 10;
+  margin-bottom: 2rem;
+}
+.btn {
+  background-color: #1d809f;
+  border: 0;
+  font-size: 1rem;
+}
+.btn:hover {
+  background-color: #1d809f;
+}
+.btn:active{
+	background-color: #155d74 !important;
+}

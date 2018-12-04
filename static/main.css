@@ -14,7 +14,7 @@ input[type="radio"] {
   display: none;
 }
 input:checked + label {
-  border-color: #79bde2;
+  border-color: #1d809f;
 }
 .type-content {
   border: 1.2px solid #e2e2e2;
@@ -29,18 +29,24 @@ input {
 :focus {
   outline: none;
 }
-
+a{
+    color:#1d809f
+}
+a:active,a:focus,a:hover{
+    color:#155d74
+}
 .btn {
-  background-color: #79bde2;
+  background-color: #1d809f!important;
   border: 0;
   font-size: 1rem;
 }
+.btn:active,
+.btn:focus,
 .btn:hover {
-  background-color: rgb(114, 178, 212);
+  background-color: :#155d74!important;
+  border-color: #155d74!important;
 }
-.btn:active {
-  background-color: rgb(108, 167, 199) !important;
-}
+
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px #fff inset;
   -webkit-text-fill-color: #000;
