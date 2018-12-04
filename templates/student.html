@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-5 text-center">
+          {% if exist == 0 %}
+          <h4>신청하신 {{work}}가 없습니다</h4>
+          <h5>새로운 근로를 신청하여 시간표를 생성해보세요.</h5>
+          <button class="btn btn-primary col-12" id="apply">근로신청</button>
+          {% else %}
+          <h2>신청하신 근로가 있습니다</h2>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+  <script src="/static/student.js"></script>
+{% endblock %}

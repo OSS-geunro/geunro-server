@@ -1,11 +1,25 @@
+function getUrlParams() {
+  var params = {};
+  window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(
+    str, key, value
+  ) {
+    params[key] = value;
+  });
+  return params;
+}
+
 $(document).ready(function() {
   $("#submit").click(function() {
     $(".alert").hide();
-    var formData = $("#login").serialize();
+    param = getUrlParams();
+    var formData = $("#apply").serialize();
+    userType = "&type=" + param.type;
+    fullData = formData.concat(userType);
+    console.log(fullData)
     $.ajax({
       type: "POST",
       url: "/apply",
-      data: formData,
+      data: fullData,
       dataType: "text",
       success: onSuccess,
       error: onError
@@ -14,7 +28,7 @@ $(document).ready(function() {
 });
 
 function onSuccess() {
-  $(location).attr('href', 'student');
+  // $(location).attr('href', 'student');
 }
 function onError(xhr) {
   if (xhr.status == 409) $("#warning").show();

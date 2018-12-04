@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, Response, render_template, session, redirect, url_for
 from flask_cors import CORS
 import json
+from urllib.parse import unquote
 
 from module.ktis import KTIS
 from module.worktable import Worktable
@@ -15,9 +16,11 @@ app = Flask(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 CORS(app)
 
+
 @app.route("/")
 def main():
     return render_template('index.html')
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -32,21 +35,37 @@ def login():
         )
         return response
     elif 'id' in session:
-        return redirect(url_for(session['userType'] + 'Table'))
+        return redirect(url_for('switch', work = '일반근로'))
     else:
         return render_template('login.html')
 
 
-@app.route("/student")
-def studentTable():
+@app.route("/<work>", methods=["GET", "POST"])
+def switch(work):
     if 'id' in session:
-        if session["userType"] == 'student':
-            exist = Worktable.GetList(session['id'])
-            return render_template('student-table.html', exist=exist)
+        if session['userType'] == "teacher":
+            exist = Worktable.GetListTeacher(work)
         else:
-            return redirect(url_for('teacherTable'))
-            # 경고메시지
+            exist = Worktable.GetListStudent(session['id'],work)
+        return render_template( session['userType'] + '.html', exist=exist, work=work)
     return redirect(url_for('main'))
+
+
+@app.route("/create", methods=["GET", "POST"])
+def teacherCreate():
+    if request.method == 'POST':
+        events = request.form['events'];
+        result = Worktable.CreateWork(request.form['events'], unquote(request.form['worktable']))
+        # print(request.form["events"])
+        response = Response(
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+    elif 'id' in session:
+        return render_template('create.html', id=session["id"])
+    else:
+        return redirect(url_for('main'))
 
 
 @app.route("/apply", methods=["GET", "POST"])
@@ -60,35 +79,6 @@ def studentApply():
         return response
     elif 'id' in session:
         return render_template('apply.html', id=session["id"])
-    else:
-        return redirect(url_for('main'))
-
-
-@app.route("/teacher")
-def teacherTable():
-    if 'id' in session:
-        if session["userType"] == 'teacher':
-            exist = Worktable.GetList("111")
-            return render_template('teacher-table.html', exist=exist)
-        else:
-            return redirect(url_for('studentTable'))
-            # 경고메시지
-    return redirect(url_for('main'))
-
-
-@app.route("/create", methods=["GET", "POST"])
-def teacherCreate():
-    if request.method == 'POST':
-        # result = int(KTIS.ToDB(request, session["id"]))
-        print(request)
-        response = Response(
-            status=200,
-            mimetype='application/json'
-        )
-
-        return response
-    elif 'id' in session:
-        return render_template('create.html', id=session["id"])
     else:
         return redirect(url_for('main'))
 

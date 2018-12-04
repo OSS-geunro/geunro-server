@@ -1,10 +1,24 @@
+
 let data;
 let IDs = [];
 let worktable;
 let startT;
 let endT;
 
+function getUrlParams() {
+  var params = {};
+  window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(
+    str, key, value
+  ) {
+    params[key] = value;
+  });
+  return params;
+}
+
 $(document).ready(function() {
+  param = getUrlParams();
+  worktable = param.type;
+  $("#name").text(decodeURI(worktable))
   $("#calendar").fullCalendar({
     //calendar 설정
     defaultView: "agendaWeek",
@@ -74,6 +88,7 @@ $("#next-pg").click(function() {
           name: e.title
         };
       })
+      
   );
   $.ajax({
     url: "create",
@@ -83,7 +98,7 @@ $("#next-pg").click(function() {
       worktable: worktable
     },
     success: function(xhr) {
-      console.log(jsoned)
+      $(location).attr("href", "list");
     },
     error: function(xhr) {
     }

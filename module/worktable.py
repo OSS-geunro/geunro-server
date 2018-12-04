@@ -10,29 +10,18 @@ import json
 class Worktable:
   # 업무 추가
   #(근로시간표이름, 업무이름, 요일, 시작시간, 끝시간, 최소인원)
-  def CreateWork(IDs, events, worktable):
-    worktable = worktable[0]
-    #존재하는 이름인지 확인
+  def CreateWork(events, worktable):
     sql = "SELECT id FROM table_list WHERE name = '" + worktable + "'"
-    if Database.GetSQL(sql):
-      #존재하는경우 409(존재함) 에러 반환
-      return "409"
-    else:
-      # 근무시간표 목록에 추가
-      sql = "INSERT INTO `table_list` (`name`)  VALUES ('" + worktable + "')"
+    table_id = str(Database.GetSQL(sql)[0][0])
+    # 업무 목록에 업무 추가
+    events = json.loads(events)
+    for i in events:
+      sql = "INSERT INTO `work_list` (`worktable`, `name`, `day`, `start`, `end`, `min`, `tableid`)  VALUES ('" + worktable + "', '" + i["name"] + "', '" + i["day"].lower() + "', '" + str(i["start"]) + "', '" + str(i["end"]) + "', '" + str(i["minimum"]) + "', '" + table_id + "')"
       Database.CommitSQL(sql)
-
-      sql = "SELECT id FROM table_list WHERE name = '" + worktable + "'"
-      table_id = str(Database.GetSQL(sql)[0][0])
-      # 업무 목록에 업무 추가
-      for i in events:
-        sql = "INSERT INTO `work_list` (`worktable`, `name`, `day`, `start`, `end`, `min`, `tableid`)  VALUES ('" + worktable + "', '" + i["name"] + "', '" + i["day"].lower() + "', '" + str(i["start"]) + "', '" + str(i["end"]) + "', '" + i["minimum"] + "', '" + table_id + "')"
-        Database.CommitSQL(sql)
-      # 근무시간표 사용자 목록에 학번 추가
-      for studentid in IDs:
-        sql = "INSERT INTO `table_users` (`studentid`, `tablename`, `tableid`)  VALUES ('" + studentid + "', '" + worktable + "', '" + table_id + "')"
-        Database.CommitSQL(sql)
-      return "201"
+    Worktable.Update(worktable)
+    sql = "UPDATE `table_list` SET `exist` = '1' WHERE `name` = '" + worktable + "';"
+    Database.CommitSQL(sql)
+    return "201"
 
   # 업무시간 가능한지 확인
   # (최소인원, 요일, 시작, 끝)
@@ -57,8 +46,7 @@ class Worktable:
 
   #근무시간표 생성
   #(근무시간표이름, 하루최대업무시간, 일주일최대업무시간)
-  def Update(json):
-    worktable = json['worktable']
+  def Update(worktable):
     sql = "SELECT exist, id FROM table_list WHERE name = '" + worktable + "'"
     exist, table_id = Database.GetSQL(sql)[0]
     if exist is not 1:
@@ -84,19 +72,26 @@ class Worktable:
             users[student]["timesum"] += work[5] - work[4]
             sql = "INSERT INTO `student_list` (`worktable`, `studentid`, `name`, `workid`, `worktableid`)  VALUES ('" + worktable + "', '" + str(student) + "', '" + work[1] + "', '" + str(work[0]) + "', '" + str(table_id) + "')"
             Database.CommitSQL(sql)
-      sql = "UPDATE `table_list` SET `exist` = '1' WHERE `name` = '" + worktable + "';"
-      Database.CommitSQL(sql)
     
     return str(table_id)
 
-  def GetList(student_id):
-    sql = "SELECT tablename FROM table_users WHERE studentid = '" + student_id + "'"
+  def GetListStudent(student_id, tablename):
+    sql = "SELECT tableid FROM table_users WHERE studentid = '" + student_id + "' AND tablename = '" + tablename + "'"
     data = Database.GetSQL(sql)
     try :
       tableName = data[0][0] 
     except IndexError:
       return 0
     return tableName
+
+  def GetListTeacher(tablename):
+    sql = "SELECT exist FROM table_list WHERE name = '" + tablename + "'"
+    data = Database.GetSQL(sql)
+    try :
+      exist = data[0][0] 
+    except IndexError:
+      return 0
+    return exist
 
 
   def Access(data):
@@ -135,10 +130,10 @@ class Worktable:
     worktable_id = str(Database.GetSQL(sql)[0][0])
     sql = "DELETE FROM student_list WHERE worktableid = '" + worktable_id + "'"
     Database.CommitSQL(sql)
-    sql = "DELETE FROM table_list WHERE id = '" + worktable_id + "'"
-    Database.CommitSQL(sql)
     sql = "DELETE FROM table_users WHERE tableid = '" + worktable_id + "'"
     Database.CommitSQL(sql)
     sql = "DELETE FROM work_list WHERE tableid = '" + worktable_id + "'"
+    Database.CommitSQL(sql)
+    sql = "UPDATE `table_list` SET `exist` = '0' WHERE `name` = '" + worktable + "';"
     Database.CommitSQL(sql)
     return '200'

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-5 text-center">
+          {% if exist == 0 %}
+          <h4>생성하신 {{work}}시간표가 없습니다</h4>
+          <h5>새로운 {{work}}시간표를 생성해보세요.</h5>
+          <button class="btn btn-primary col-12"id="create">근로시간표 생성</button>
+          {% else %}
+          <h2>생성하신 근로가 있습니다</h2>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+  <script src="/static/teacher.js"></script>
+{% endblock %}
