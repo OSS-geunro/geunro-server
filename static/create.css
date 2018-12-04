@@ -1,20 +1,48 @@
-body{
-    font-family: 'Black Han Sans', sans-serif;
-    font-weight: lighter;
+main {
+  font-family: "Noto Sans KR" !important;
+  padding-left: 40px !important;
+  padding-right: 40px !important;
 }
-
+#contents {
+  padding-top: 25px !important;
+}
+#name {
+  padding-top: 1px;
+  font-family: "Black Han Sans";
+  margin: 0 !important;
+  color: black;
+}
+#cal-header {
+  margin-bottom: 30px;
+}
+#next-pg {
+  padding: 8px 16px;
+  font-size: 13px;
+  height: calc(100% - 5px);
+  background-color: rgb(243, 214, 46) !important;
+  border-radius: 40px;
+  color: rgba(97, 71, 24, 1) !important;
+}
 .fc-event {
-  background-color: #79bde2;
+  background-color: rgb(243, 214, 46);
   border: none;
+  opacity: 1;
   border-radius: 0;
 }
 .fc-widget-header {
-  border-color: transparent !important;
+  /* border-color: transparent !important; */
+  border-left: 0px !important;
+  border-right: 0px !important;
 }
 
 .fc-widget-content {
   border-left: 0 !important;
   border-right: 0 !important;
+}
+
+.fc-highlight {
+  background: rgba(236, 211, 67, 0.8);
+  opacity: 0.3;
 }
 
 .fc-axis {
@@ -24,4 +52,68 @@ body{
 
 td {
   border-color: #eee !important;
+}
+
+span {
+  font-size: 13px;
+  font-weight: 400;
+  color: black !important;
+}
+
+input {
+  border: 0 !important;
+  background-color: rgb(251, 251, 251) !important;
+  font-family: "Noto Sans KR" !important;
+  font-size: 12px !important;
+  color: black !important;
+  padding-left: 20px !important;
+  border-radius: 30px !important;
+}
+
+input::placeholder {
+  color: rgb(44, 44, 44) !important;
+}
+
+.modal-dialog {
+  width: 230px;
+  margin-top: 35vh;
+  margin-left: 50%;
+}
+
+.modal-content {
+  padding: 30px 30px;
+  text-align: center;
+  border: 0 !important;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.modal-backdrop {
+  background-color: white;
+  opacity: 0.5 !important;
+}
+
+#submit {
+  padding: 8px 16px;
+  font-size: 13px;
+  height: calc(100% - 5px);
+  background-color: rgb(243, 214, 46) !important;
+  border-radius: 40px;
+  color: rgba(97, 71, 24, 1) !important;
+  font-family: "Noto Sans KR" !important;
+}
+
+#time {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#work-name {
+  padding-left: 0 !important;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+#minimum {
+  padding-left: 0 !important;
+  text-align: center;
+  margin-bottom: 15px;
 }

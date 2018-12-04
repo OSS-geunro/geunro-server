@@ -2,8 +2,7 @@
 
 {% block css %}
   <link rel="stylesheet" href="./static/fullcalendar.css">
-  <link rel="stylesheet" href="./static/login.css">
-  <link rel="stylesheet" href="./static/main.css">
+  <link rel="stylesheet" href="./static/apply.css">
 {% endblock %}
 
 {% block main %}
@@ -17,9 +16,10 @@
     </div>
     <div class="row justify-content-center">
       <div class="col-5">
+        <div id=title></div>
         <form id="apply" onsubmit="return false;">
           <div class="form-group">
-            <label for="KTISID">학번 혹은 사번</label>
+            <label for="KTISID">학번</label>
             <input class="form-control" autocomplete="off" id="KTISID" value="{{id}}" disabled>
           </div>
           <div class="form-group">

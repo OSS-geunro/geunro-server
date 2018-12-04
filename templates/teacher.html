@@ -1,15 +1,25 @@
 {% extends 'base.html' %}
 
+{% block css %}
+<link rel="stylesheet" href="./static/fullcalendar.css">
+<link rel="stylesheet" href="./static/list.css">
+<link rel="stylesheet" href="./static/empty.css">
+{% endblock %}
+
 {% block main %}
     <div class="container-fluid">
       <div class="row justify-content-center">
-        <div class="col-5 text-center">
+        <div class="col-12 text-center">
           {% if exist == 0 %}
           <h4>생성하신 {{work}}시간표가 없습니다</h4>
-          <h5>새로운 {{work}}시간표를 생성해보세요.</h5>
-          <button class="btn btn-primary col-12"id="create">근로시간표 생성</button>
+          <button class="btn btn-primary"id="create">시간표 생성</button>
           {% else %}
-          <h2>생성하신 근로가 있습니다</h2>
+          <div id="cal-header" class="row justify-content-between">
+              <h2 id="name">
+              </h2>
+              <button id="del" type="button" class="btn btn-secondary">시간표 삭제</button>
+            </div>
+          <div id='calendar'></div>
           {% endif %}
         </div>
       </div>
@@ -17,5 +27,12 @@
 {% endblock %}
 
 {% block js %}
+  {% if exist == 0 %}
   <script src="/static/teacher.js"></script>
+  {% else %}
+  <script src="/static/access.js"></script>
+  <script src="/static/deltable.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+  {% endif %}
 {% endblock %}

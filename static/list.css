@@ -1,0 +1,49 @@
+.fc-unthemed .fc-list-empty {
+  height: calc(100vh - 40px) !important;
+  color: black !important;
+  background-color: transparent;
+  font-size: 20px;
+}
+.fc-list-view {
+  border: 0;
+}
+
+.fc-widget-header {
+  color: black !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+  border-color: 0 !important;
+}
+
+.fc-unthemed .fc-content,
+.fc-unthemed .fc-divider,
+.fc-unthemed .fc-list-heading td,
+.fc-unthemed .fc-list-view,
+.fc-unthemed .fc-popover,
+.fc-unthemed .fc-row,
+.fc-unthemed tbody,
+.fc-unthemed td,
+.fc-unthemed th,
+.fc-unthemed thead {
+  border-color: white !important;
+}
+.fc-unthemed .fc-list-item:hover td{
+  background-color: transparent;
+}
+.fc-list-heading-main {
+  color: black !important;
+  background-color: transparent !important;
+  font-size: 30px !important;
+}
+.fc-event-dot {
+  background-color: rgb(243, 214, 46);
+}
+
+#studentid {
+  width: 100%;
+  background-color: rgb(251, 251, 251);
+  font-family: "Noto Sans KR";
+  font-size: 12px;
+  margin-top: 5px;
+  padding: 14px 12px !important;
+}

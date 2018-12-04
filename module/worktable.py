@@ -47,6 +47,7 @@ class Worktable:
   #근무시간표 생성
   #(근무시간표이름, 하루최대업무시간, 일주일최대업무시간)
   def Update(worktable):
+    
     sql = "SELECT exist, id FROM table_list WHERE name = '" + worktable + "'"
     exist, table_id = Database.GetSQL(sql)[0]
     if exist is not 1:
@@ -96,9 +97,7 @@ class Worktable:
 
   def Access(data):
     worktable = list()
-    worktable_id = data['worktable_id']
-    sql = "SELECT name FROM table_list WHERE id = '" + worktable_id + "'"
-    worktable_name = Database.GetSQL(sql)[0][0]
+    worktable_name = data['worktable_id']
     sql = "SELECT day, name, start, end, id FROM work_list WHERE worktable = '" + worktable_name + "'"
     worklist = Database.GetSQL(sql)
     days = {'mon':345600, 'tue':432000, 'wed':518400, 'thu':604800, 'fri':691200}

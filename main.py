@@ -44,10 +44,12 @@ def login():
 def switch(work):
     if 'id' in session:
         if session['userType'] == "teacher":
+            user_type = 'teacher'
             exist = Worktable.GetListTeacher(work)
         else:
+            user_type = 'student'
             exist = Worktable.GetListStudent(session['id'],work)
-        return render_template( session['userType'] + '.html', exist=exist, work=work)
+        return render_template( session['userType'] + '.html', exist=exist, work=work, type=user_type)
     return redirect(url_for('main'))
 
 
@@ -56,14 +58,13 @@ def teacherCreate():
     if request.method == 'POST':
         events = request.form['events'];
         result = Worktable.CreateWork(request.form['events'], unquote(request.form['worktable']))
-        # print(request.form["events"])
         response = Response(
             status=200,
             mimetype='application/json'
         )
         return response
     elif 'id' in session:
-        return render_template('create.html', id=session["id"])
+        return render_template('create.html', id=session["id"], type=session['userType'])
     else:
         return redirect(url_for('main'))
 

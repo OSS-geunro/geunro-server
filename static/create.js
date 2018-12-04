@@ -17,8 +17,8 @@ function getUrlParams() {
 
 $(document).ready(function() {
   param = getUrlParams();
-  worktable = param.type;
-  $("#name").text(decodeURI(worktable))
+  worktable = decodeURI(param.type);
+  $("#name").text(worktable+" 업무 추가")
   $("#calendar").fullCalendar({
     //calendar 설정
     defaultView: "agendaWeek",
@@ -35,19 +35,21 @@ $(document).ready(function() {
     slotLabelInterval: "00:30",
     slotEventOverlap: false,
     event: data,
+    locale: 'ko',
     editable: true,
     selectable: true,
     defaultDate: moment("1970-01-05"),
+    dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'],
 
     // 시간 지정시 업무 추가 modal
     select: function(startTime, endTime) {
       startT = startTime;
       endT = endTime;
       let start = startTime.format("dddd hh:mm");
-      let end = endTime.format("dddd hh:mm");
-      $("#start-time").text(start);
-      $("#end-time").text(end);
+      let end = endTime.format("hh:mm");
+      $("#time").text(start + " ~ " + end);
       $("#modal").modal("show");
+      $("#minimum").val(3);
     },
 
     // 업무 클릭시 삭제 modal
@@ -64,7 +66,6 @@ $(document).ready(function() {
       minimum: Minimum,
       start: startT,
       end: endT,
-      minimum: 1,
     };
     $("#modal").modal("hide");
     $("#calendar").fullCalendar("renderEvent", Event);
@@ -98,9 +99,10 @@ $("#next-pg").click(function() {
       worktable: worktable
     },
     success: function(xhr) {
-      $(location).attr("href", "list");
+      $(location).attr("href", param.type);
     },
     error: function(xhr) {
+      $(location).attr("href", param.type);
     }
   });
 });

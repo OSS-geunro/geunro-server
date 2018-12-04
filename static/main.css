@@ -1,5 +1,21 @@
+@import url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400,600|Noto+Sans+KR');
+::-webkit-scrollbar {
+  display:none;
+  }
+
+#contents {
+  height:100vh;
+  overflow: scroll;
+  padding:15px;
+}
+
+main{
+  margin: 0;
+  padding:0;
+}
+
 body{
-    font-family: 'Black Han Sans', sans-serif;
+    font-family: 'Black Han Sans';
     font-weight: 200;
     min-height: 100vh;
 }

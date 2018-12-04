@@ -2,40 +2,23 @@
 
 {% block css %}
   <link rel="stylesheet" href="./static/fullcalendar.css">
-  <link rel="stylesheet" href="./static/create.css">
   <link rel="stylesheet" href="./static/main.css">
+  <link rel="stylesheet" href="./static/create.css">
 {% endblock %}
 
 {% block modal %}
   <div class="modal-dialog" role="document">
     <form class="modal-content" onsubmit="return false;">
-      <div class="modal-header">
-        <h5 class="modal-title">업무 추가</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h4>업무 이름</h4>
-        <input id=work-name />
-        <h4>시작 시간</h4>
-        <p id="start-time"></p>
-        <h4>끝 시간</h4>
-        <p id="end-time"></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-        <button id="submit" type="submit" class="btn btn-primary">추가</button>
-      </div>
+        <div id=time></div>
+        <input class="form-control" autocomplete="off" id="work-name" placeholder="업무이름">
+        <input class="form-control" autocomplete="off" id="minimum" placeholder="최소인원">
+      <button id="submit" class="btn btn-primary">추가</button>
     </form>
   </div>
 {% endblock %}
 
 {% block main %}
   <div id="cal-header" class="row justify-content-between">
-    <h1>
-      근로 업무 추가
-    </h1>
     <h2 id="name">
     </h2>
     <button id="next-pg" type="button" class="btn btn-secondary" data-dismiss="modal">다음</button>

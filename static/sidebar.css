@@ -1,4 +1,66 @@
-.sidebar {
-  background-color: white;
-  border : none;
+#header_title {
+  font-size: 45px;
+  color: black;
+  padding:0;
+}
+#sub_title {
+  font-size: 15px;
+  color: black;
+  margin-top: -15px;
+  padding-left: 2px;
+}
+#header {
+  padding-left: 15px;
+  padding-top: 15px;
+  padding-bottom: 50px;
+}
+
+.sidebar{
+  background-color: rgb(251, 251, 251);
+  height: 100vh;
+}
+
+#logout {
+  position: absolute;
+  background-color: rgb(243, 214, 46);
+  width: 100%;
+  margin-left: -15px;
+  bottom: 0px;
+  color: rgba(97, 71, 24, 1);
+  font-family: 'Noto Sans KR';
+  font-size: 13px;
+  padding: 10px 10px;
+  text-align: center;
+  /* text-decoration: underline; */
+  cursor: pointer;
+}
+
+#logout:hover {
+  color: rgba(97, 71, 24, 0.8) !important;
+  background-color: rgba(236, 211, 67, 0.8)!important;
+}
+
+.nav-link {
+  cursor: pointer;
+  color: rgb(66, 66, 66) !important;
+  font-family: 'Noto Sans KR';
+  font-size: 13px;
+  margin-bottom: 5px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+  border-radius: 25px;
+}
+.selected {
+  /* font-weight: 600; */
+  color: rgba(97, 71, 24, 1) !important;
+  background-color: rgb(243, 214, 46);
+}
+.selected:hover {
+  color: rgba(97, 71, 24, 0.8) !important;
+  background-color: rgba(236, 211, 67, 0.8)!important;
+}
+
+.nav-link:hover {
+  background-color: rgb(243, 243, 243);
 }

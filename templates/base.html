@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<title>Login</title>
+<title>꿀로</title>
 
 <head>
   <meta charset="UTF-8">
@@ -23,7 +23,17 @@
     <div class="row">
       <!-- 사이드바 -->
       <nav class="col-2 sidebar">
+        
         <div class="sidebar-sticky">
+          <div id=header>
+          
+          <div id=header_title>꿀로</div>  
+          {% if type == 'teacher' %}
+          <div id=sub_title>교사용</div>
+          {% else %}
+          <div id=sub_title>학생용</div>
+          {% endif %}
+        </div>
           <ul class="nav flex-column">
             <li class="nav-item">
               <a class="nav-link" id="general">일반근로</a>
@@ -36,10 +46,13 @@
             </li>
           </ul>
         </div>
+        <a id="logout" href="logout">로그아웃</a>
       </nav>
       <main role="main" class="col-10">
+        <div id=contents>
           {% block main %}
           {% endblock %}
+        </div>
       </main>
     </div>
   </div>

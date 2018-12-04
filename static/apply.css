@@ -1,0 +1,54 @@
+
+label {
+  padding-left: 10px;
+  font-size: 15px;
+  color: black !important;
+}
+
+#title{
+  margin-top: calc(50vh - 200px);
+  font-size: 30px;
+  margin-left: 10px;
+  margin-bottom: 20px;
+}
+
+input:disabled {
+  background-color: rgb(241, 241, 241) !important;
+  color: rgb(185, 185, 185) !important;
+}
+
+input {
+  border: 0 !important;
+  background-color: rgb(251, 251, 251) !important;
+  font-family: "Noto Sans KR" !important;
+  font-size: 12px !important;
+  color: black !important;
+  padding-left: 20px !important;
+  border-radius: 30px !important;
+}
+
+input::placeholder {
+  color: rgb(44, 44, 44) !important;
+}
+
+.text-muted {
+  padding-left: 10px;
+  font-family: "Noto Sans KR" !important;
+  font-size: 10px !important;
+  color: rgb(196, 196, 196) !important;
+}
+
+.btn {
+  margin-top: 10px;
+  background-color: rgb(243, 214, 46) !important;
+  font-family: "Noto Sans KR";
+  font-size: 12px;
+  color: rgba(97, 71, 24, 1) !important;
+  padding: 10px 25px;
+  border-radius: 20px;
+}
+
+.btn:hover {
+  color: rgba(97, 71, 24, 0.8) !important;
+  background-color: rgba(236, 211, 67, 0.8) !important;
+}

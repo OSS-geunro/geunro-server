@@ -9,13 +9,14 @@ function getUrlParams() {
 }
 
 $(document).ready(function() {
+  param = getUrlParams();
+  $('#title').text(decodeURI(param.type) +" 신청");
   $("#submit").click(function() {
     $(".alert").hide();
     param = getUrlParams();
     var formData = $("#apply").serialize();
     userType = "&type=" + param.type;
     fullData = formData.concat(userType);
-    console.log(fullData)
     $.ajax({
       type: "POST",
       url: "/apply",
@@ -28,7 +29,8 @@ $(document).ready(function() {
 });
 
 function onSuccess() {
-  // $(location).attr('href', 'student');
+  param = getUrlParams();
+  $(location).attr('href', param.type);
 }
 function onError(xhr) {
   if (xhr.status == 409) $("#warning").show();
