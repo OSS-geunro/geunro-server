@@ -1,6 +1,7 @@
 # 꿀로 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 해당 프로젝트는 국민대학교 강의 '오픈소스소프트웨어'의 조별 프로젝트로 제작되었습니다.
+[근로 지원 웹 서비스]
 ## 사전설정: ```.env```
 이 프로젝트는 .env 파일을 통한 사전 설정이 필요합니다.
 
