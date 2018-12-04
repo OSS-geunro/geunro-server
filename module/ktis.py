@@ -58,12 +58,10 @@ class KTIS:
                         Database.CommitSQL(sql)
                         return "200"
                     else:
-                        print('error')
                         sql = "DELETE FROM users WHERE studentid = '" + studentid + "'"
                         Database.CommitSQL(sql)
                 except IndexError:
                     result = 0
-                print('2')
                 sql = "SELECT id FROM table_list WHERE name = '" + worktable + "'"
                 table_id = str(Database.GetSQL(sql)[0][0])
                 sql = "INSERT INTO `table_users` (`studentid`, `tablename`, `tableid`)  VALUES ('" + \
@@ -83,7 +81,6 @@ class KTIS:
                 sql = "INSERT INTO `users` (`studentid`, `name`)  VALUES ('" + \
                     studentid + "', '" + name.text + "')"
                 Database.CommitSQL(sql)
-                print('3')
                 # 시간표 분리
                 tables = soup.findAll("table")[1]
                 tr_list = tables.select("tr")[8:]
@@ -93,10 +90,8 @@ class KTIS:
                     string = td.text.replace(
                         ", ", ",").replace("7호관", "칠호관")
                     temp_list += string.split()
-                print(temp_list)
                 for item in temp_list:
                     # 일반 강의 검색
-                    print(item)
                     pattern = re.compile(r'[월,화,수,목,금]([A-Z]|\d{1,2})')
                     match = re.search(pattern, item)
                     time = str(match.group())[1:]
