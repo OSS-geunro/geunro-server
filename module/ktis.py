@@ -46,61 +46,66 @@ class KTIS:
 
             else:
                 # 학생이 기존 DB에 있는지 확인
-                sql = "SELECT EXISTS (SELECT * FROM users WHERE studentid='" + \
-                    studentid + "') as success;"
+                sql = "SELECT exist FROM users WHERE studentid='" + \
+                    studentid + "'"
                 exist = Database.GetSQL(sql)
-                if exist[0][0] is 1:
-                    sql = "SELECT id FROM table_list WHERE name = '" + worktable + "'"
-                    table_id = str(Database.GetSQL(sql)[0][0])
-                    sql = "INSERT INTO `table_users` (`studentid`, `tablename`, `tableid`)  VALUES ('" + \
-                        studentid + "', '" + worktable + "', '" + table_id + "')"
-                    Database.CommitSQL(sql)
-                    return "200"
-                else:
-                    sql = "SELECT id FROM table_list WHERE name = '" + worktable + "'"
-                    table_id = str(Database.GetSQL(sql)[0][0])
-                    sql = "INSERT INTO `table_users` (`studentid`, `tablename`, `tableid`)  VALUES ('" + \
-                        studentid + "', '" + worktable + "', '" + table_id + "')"
-                    Database.CommitSQL(sql)
+                try :
+                    if exist[0][0] is 1:
+                        sql = "SELECT id FROM table_list WHERE name = '" + worktable + "'"
+                        table_id = str(Database.GetSQL(sql)[0][0])
+                        sql = "INSERT INTO `table_users` (`studentid`, `tablename`, `tableid`)  VALUES ('" + \
+                            studentid + "', '" + worktable + "', '" + table_id + "')"
+                        Database.CommitSQL(sql)
+                        return "200"
+                    else:
+                        print('error')
+                        sql = "DELETE FROM users WHERE studentid = '" + studentid + "'"
+                        Database.CommitSQL(sql)
+                except IndexError:
+                    result = 0
+                print('2')
+                sql = "SELECT id FROM table_list WHERE name = '" + worktable + "'"
+                table_id = str(Database.GetSQL(sql)[0][0])
+                sql = "INSERT INTO `table_users` (`studentid`, `tablename`, `tableid`)  VALUES ('" + \
+                    studentid + "', '" + worktable + "', '" + table_id + "')"
+                Database.CommitSQL(sql)
 
-                    # 수강신청내역 불러오기
-                    post_one = s.get(
-                        'https://ktis.kookmin.ac.kr/kmu/usb.Usb0102rAGet01.do')
-                    soup = bs(post_one.text, 'html.parser')
+                # 수강신청내역 불러오기
+                post_one = s.get(
+                    'https://ktis.kookmin.ac.kr/kmu/usb.Usb0102rAGet01.do?txt_smt=20&txt_year=2018')
+                soup = bs(post_one.text, 'html.parser')
 
-                    # 시간표 flag
-                    tables = soup.findAll("table")[1]
-                    tr = tables.select("tr")[3]
-                    tr = tr.select("tr")[2]
-                    name = tr.select("td")[1]
-                    sql = "INSERT INTO `users` (`studentid`, `name`)  VALUES ('" + \
-                        studentid + "', '" + name.text + "')"
-                    Database.CommitSQL(sql)
+                # 시간표 flag
+                tables = soup.findAll("table")[1]
+                tr = tables.select("tr")[3]
+                tr = tr.select("tr")[2]
+                name = tr.select("td")[1]
+                sql = "INSERT INTO `users` (`studentid`, `name`)  VALUES ('" + \
+                    studentid + "', '" + name.text + "')"
+                Database.CommitSQL(sql)
+                print('3')
+                # 시간표 분리
+                tables = soup.findAll("table")[1]
+                tr_list = tables.select("tr")[8:]
+                temp_list = list()
+                for tr in tr_list:
+                    td = tr.select("td")[6]
+                    string = td.text.replace(
+                        ", ", ",").replace("7호관", "칠호관")
+                    temp_list += string.split()
+                print(temp_list)
+                for item in temp_list:
+                    # 일반 강의 검색
+                    print(item)
+                    pattern = re.compile(r'[월,화,수,목,금]([A-Z]|\d{1,2})')
+                    match = re.search(pattern, item)
+                    time = str(match.group())[1:]
+                    Timetable.Add(studentid, item[0], time)
 
-                    # 시간표 분리
-                    tables = soup.findAll("table")[1]
-                    tr_list = tables.select("tr")[8:]
-                    temp_list = list()
-                    for tr in tr_list:
-                        td = tr.select("td")[6]
-                        string = td.text.replace(
-                            ", ", ",").replace("7호관", "칠호관")
-                        temp_list += string.split()
-
-                    studentid = login_info["txt_user_id"]
-                    sql = "SELECT exist FROM users WHERE studentid = '" + studentid + "'"
-                    exist = Database.GetSQL(sql)
-                    for item in temp_list:
-                        # 일반 강의 검색
-                        pattern = re.compile(r'[월,화,수,목,금]([A-Z]|\d{1,2})')
-                        match = re.search(pattern, item)
+                    # 연강 검색
+                    pattern = re.compile(r'[,]([A-Z]|\d{1,2})')
+                    match = re.search(pattern, item)
+                    if match is not None:
                         time = str(match.group())[1:]
                         Timetable.Add(studentid, item[0], time)
-
-                        # 연강 검색
-                        pattern = re.compile(r'[,]([A-Z]|\d{1,2})')
-                        match = re.search(pattern, item)
-                        if match is not None:
-                            time = str(match.group())[1:]
-                            Timetable.Add(studentid, item[0], time)
-                    return "201"
+                return "201"
