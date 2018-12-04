@@ -3,16 +3,33 @@
  * Copyright 2013-2018 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-stylish-portfolio/blob/master/LICENSE)
  */
-body,html{
+html{
     width:100%;
     height:100%
 }
 body{
     font-family: 'Black Han Sans', sans-serif;
+    min-height: 30rem;
+    position: relative;
+    display: table;
+    width: 100%;
+    height: auto;
+    padding-top: 15rem;
+    padding-bottom: 8rem;
+    background: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0.1)), to(rgba(255, 255, 255, 0.1))), url("image/pu.jpg");
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%), url("image/pu.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
+#description {
+  font-style: italic;
+}
+
 .btn-xl{
     padding:1.25rem 2.5rem;
     border-radius: 0.5rem;
+    text-decoration: none;
 }
 h1,h2,h3,h4,h5,h6{
     font-weight:10
@@ -29,24 +46,10 @@ h1,h2,h3,h4,h5,h6{
 .map iframe{
     pointer-events:none
 }
-.masthead{
-    min-height:30rem;
-    position:relative;
-    display:table;
-    width:100%;
-    height:auto;
-    padding-top:15rem;
-    padding-bottom:8rem;
-    background:-webkit-gradient(linear,left top,right top,from(rgba(255,255,255,.1)),to(rgba(255,255,255,.1))),url(../img/bg-masthead.jpg);
-    background:linear-gradient(90deg,rgba(255,255,255,.1) 0,rgba(255,255,255,.1) 100%),url(../img/bg-masthead.jpg);
-    background-position:center center;
-    background-repeat:no-repeat;
-    background-size:cover
-}
 .masthead h1{
-    font-size:4rem;
+    font-size:5rem;
     margin:0;
-    padding:0
+    padding:0;
 }
 @media (min-width:992px){
     .masthead{
@@ -73,23 +76,10 @@ a:active,a:focus,a:hover{
     background-color:#155d74!important;
     border-color:#155d74!important
 }
-.btn-secondary{
-    background-color:#ecb807!important;border-color:#ecb807!important;
-    color:#fff!important
-}
-.btn-secondary:active,
-.btn-secondary:focus,
-.btn-secondary:hover{
-    background-color:#ba9106!important;
-    border-color:#ba9106!important
-}
-.btn-dark{
-    color:#fff!important
-}
+
 .btn{
     -webkit-
     box-shadow:0 3px 3px 0 rgba(0,0,0,.1);
     box-shadow:0 3px 3px 0 rgba(0,0,0,.1);
     font-weight:10
 }
-
