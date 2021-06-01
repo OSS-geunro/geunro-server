@@ -7,5 +7,5 @@ python-dotenv==0.9.1
 pytz==2018.5
 requests==2.20.0
 setuptools==39.0.1
-urllib3==1.23
+urllib3==1.26.5
 Jinja2==2.10
